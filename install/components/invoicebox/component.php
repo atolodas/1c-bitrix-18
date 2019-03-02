@@ -77,6 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 }
 //////////////////
 
+
 /////////////////
 //проверка ключа и хеша запроса
 $sign_strA =
@@ -106,16 +107,11 @@ if(ToUpper($sign_crcA) != ToUpper($request->get('sign'))){
 }
 /////////////////
 
+$participantId = isset($params['INVOICEBOX_PARTICIPANT_ID']) && !empty($params['INVOICEBOX_PARTICIPANT_ID']['VALUE']) ? $params['INVOICEBOX_PARTICIPANT_ID']['VALUE'] : null;
+
 /////////////////
 //тестовый запрос
-if ($request->get('id') == -1
-    && $request->get('ucode') == '00000-00000-00000-0000'
-    && $request->get('participant_order_id') == 'TEST'
-    && $request->get('testmode') == 'y'
-    && $request->get('organization_name') == 'TEST'
-    && $request->get('participant_amount') == '100.00'
-    && $request->get('point_name') == 'TEST'
-) {
+if ($request->get('testmode') == 1) {
     CEventLog::Add([
         'SEVERITY' => 'INFO',
         'AUDIT_TYPE_ID' => 'INVOICE_PAYMENT_LOG',
@@ -130,7 +126,6 @@ if ($request->get('id') == -1
 
 ////////////////
 //проверяем идентификатор магазина
-$participantId = isset($params['INVOICEBOX_PARTICIPANT_ID']) && !empty($params['INVOICEBOX_PARTICIPANT_ID']['VALUE']) ? $params['INVOICEBOX_PARTICIPANT_ID']['VALUE'] : null;
 if ($request->get('participantId') != $participantId){
     CEventLog::Add([
         'SEVERITY' => 'INFO',
